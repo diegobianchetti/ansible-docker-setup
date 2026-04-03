@@ -1,0 +1,12 @@
+---
+- name: Restart docker
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+    daemon_reload: true
+
+- name: Reload docker group
+  ansible.builtin.debug:
+    msg: >-
+      Grupo docker atualizado. O usuario precisara fazer logout/login
+      ou executar 'newgrp docker' para que a alteracao tenha efeito.

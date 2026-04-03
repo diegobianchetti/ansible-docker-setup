@@ -1,0 +1,35 @@
+---
+- name: Instalar Docker CE (versao latest)
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: false
+  when: docker_version == "latest"
+
+- name: Instalar Docker CE (versao pinada)
+  ansible.builtin.apt:
+    name:
+      - "docker-ce={{ docker_version }}"
+      - "docker-ce-cli={{ docker_version }}"
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: false
+    allow_downgrade: true
+  when: docker_version != "latest"
+
+- name: Fixar versao do Docker para evitar upgrades nao planejados
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+  when: docker_version != "latest"

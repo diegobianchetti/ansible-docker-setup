@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: diego-oogway
+  description: Instala e configura Docker CE em hosts Ubuntu 24.04
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - noble  # 24.04
+  galaxy_tags:
+    - docker
+    - containers
+    - ubuntu
+
+dependencies: []

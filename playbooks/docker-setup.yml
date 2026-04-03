@@ -1,0 +1,52 @@
+---
+- name: Instalacao e configuracao do Docker CE em hosts Ubuntu 24.04
+  hosts: docker_hosts
+  gather_facts: true
+
+  pre_tasks:
+    - name: Verificar versao do SO (deve ser Ubuntu 24.04)
+      ansible.builtin.assert:
+        that:
+          - ansible_distribution == "Ubuntu"
+          - ansible_distribution_major_version == "24"
+        fail_msg: >-
+          Este playbook suporta apenas Ubuntu 24.04.
+          Host {{ inventory_hostname }} reporta
+          {{ ansible_distribution }} {{ ansible_distribution_version }}.
+        success_msg: "{{ inventory_hostname }}: Ubuntu 24.04 confirmado."
+
+    - name: Verificar conectividade com o repositorio Docker
+      ansible.builtin.uri:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        method: HEAD
+        timeout: 10
+      register: docker_repo_check
+      failed_when: docker_repo_check.status not in [200, 301, 302]
+
+  roles:
+    - role: docker
+
+  post_tasks:
+    - name: Verificar versao instalada do Docker
+      ansible.builtin.command: docker --version
+      register: docker_version_output
+      changed_when: false
+
+    - name: Exibir versao do Docker instalada
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }}: {{ docker_version_output.stdout }}"
+
+    - name: Verificar storage driver ativo
+      ansible.builtin.command: docker info --format '{% raw %}{{.Driver}}{% endraw %}'
+      register: docker_driver_output
+      changed_when: false
+
+    - name: Confirmar storage driver esperado
+      ansible.builtin.assert:
+        that:
+          - docker_driver_output.stdout == docker_storage_driver
+        fail_msg: >-
+          ATENCAO: storage driver ativo e '{{ docker_driver_output.stdout }}',
+          esperado '{{ docker_storage_driver }}'.
+        success_msg: >-
+          {{ inventory_hostname }}: storage driver '{{ docker_driver_output.stdout }}' confirmado.

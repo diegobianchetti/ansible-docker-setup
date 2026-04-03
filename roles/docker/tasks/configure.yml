@@ -1,0 +1,16 @@
+---
+- name: Garantir que /etc/docker existe
+  ansible.builtin.file:
+    path: /etc/docker
+    state: directory
+    mode: "0755"
+
+- name: Implantar daemon.json
+  ansible.builtin.template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: "0644"
+    validate: "python3 -c \"import json, sys; json.load(open('%s'))\""
+  notify: Restart docker

@@ -1,0 +1,13 @@
+---
+- name: Habilitar e iniciar Docker
+  ansible.builtin.systemd:
+    name: docker
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Habilitar e iniciar containerd
+  ansible.builtin.systemd:
+    name: containerd
+    enabled: true
+    state: started

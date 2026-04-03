@@ -1,0 +1,8 @@
+---
+- name: Adicionar usuarios ao grupo docker
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  loop: "{{ docker_users }}"
+  notify: Reload docker group

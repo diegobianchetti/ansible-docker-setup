@@ -1,0 +1,21 @@
+---
+- name: Instalar pre-requisitos
+  ansible.builtin.import_tasks: prereqs.yml
+  tags: [docker, prereqs]
+
+- name: Instalar Docker CE
+  ansible.builtin.import_tasks: install.yml
+  tags: [docker, install]
+
+- name: Configurar daemon
+  ansible.builtin.import_tasks: configure.yml
+  tags: [docker, configure]
+
+- name: Gerenciar servico
+  ansible.builtin.import_tasks: service.yml
+  tags: [docker, service]
+
+- name: Adicionar usuarios ao grupo docker
+  ansible.builtin.import_tasks: users.yml
+  tags: [docker, users]
+  when: docker_users | length > 0

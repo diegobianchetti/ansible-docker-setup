@@ -1,0 +1,25 @@
+---
+# Versao do Docker CE a instalar. "latest" aceita a versao corrente do repositorio oficial.
+docker_version: "latest"
+
+# Storage driver explicitamente definido.
+# Ver secao "Decisoes Tecnicas" no README para o racional desta escolha.
+docker_storage_driver: overlay2
+
+# Espaco reservado para metadata do devicemapper (ignorado com overlay2, mantido por documentacao).
+# docker_dm_basesize: "20G"
+
+# Usuarios locais que devem pertencer ao grupo docker (opcional).
+docker_users: []
+# docker_users:
+#   - ubuntu
+#   - deploy
+
+# Habilitar live-restore: containers continuam rodando durante restart do daemon.
+docker_live_restore: true
+
+# Log driver padrao para todos os containers.
+docker_log_driver: json-file
+docker_log_opts:
+  max-size: "100m"
+  max-file: "5"
