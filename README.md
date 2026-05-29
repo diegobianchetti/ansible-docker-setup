@@ -51,7 +51,7 @@ ansible-docker-setup/
 
 ```bash
 # Clonar e entrar no repositório
-git clone https://github.com/diego-oogway/ansible-docker-setup.git
+git clone https://github.com/diegobianchetti/ansible-docker-setup.git
 cd ansible-docker-setup
 
 # Ajustar inventory/hosts.yml com seus hosts reais
