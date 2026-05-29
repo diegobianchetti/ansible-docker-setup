@@ -3,6 +3,10 @@
   hosts: docker_hosts
   gather_facts: true
 
+  module_defaults:
+    ansible.builtin.apt:
+      lock_timeout: 120
+
   pre_tasks:
     - name: Verificar versao do SO (deve ser Ubuntu 24.04)
       ansible.builtin.assert:
